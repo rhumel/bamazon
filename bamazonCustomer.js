@@ -96,7 +96,9 @@ inquirer
                         connection.end();
                     } else {
                         quantity = res[0].quantity - quantity;
+                        price = res[0].customer_price;
                         updateQuantity(itemNumber, quantity);
+                        totalPurchase(price,quantity);
                     }
 
                 }
@@ -133,3 +135,11 @@ function updateQuantity(itemNumber,prodQuant) {
     // console.log(query.sql);
     
   }
+
+  function totalPurchase(price,quantity) {
+
+    var totalCost = (price * quantity);
+
+    console.log("Your total cost is $" + totalCost);
+
+  };
