@@ -37,7 +37,7 @@ function displayProducts() {
             console.log(err);
             throw err;
         } else {
-            console.log("---------------------------Auction List----------------------------------");
+            console.log("---------------------------Product List----------------------------------");
             console.log("  No.     Product         Department      Price        Quantity          ");
             console.log("_________________________________________________________________________");
             // Log all results of the SELECT statement
@@ -95,9 +95,9 @@ inquirer
                         console.log("Sorry, it appears that we only have " + res[0].quantity +" of the " + res[0].product_name); //+ " auction item Selected\n"); 
                         connection.end();
                     } else {
-                        quantity = res[0].quantity - quantity;
+                        remainQuantity = res[0].quantity - quantity;
                         price = res[0].customer_price;
-                        updateQuantity(itemNumber, quantity);
+                        updateQuantity(itemNumber, remainQuantity);
                         totalPurchase(price,quantity);
                     }
 
@@ -126,7 +126,7 @@ function updateQuantity(itemNumber,prodQuant) {
         }
       ],
       function(err, res) {
-        console.log("Thank you for you purchase!!!\n");
+        console.log("Thank you for your purchase!!!\n");
         connection.end();
       }
     );
@@ -137,6 +137,8 @@ function updateQuantity(itemNumber,prodQuant) {
   }
 
   function totalPurchase(price,quantity) {
+      console.log (price +" " + quantity);
+
 
     var totalCost = (price * quantity);
 
