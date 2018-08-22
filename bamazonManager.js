@@ -1,8 +1,7 @@
 // import packages into file
 var inquirer = require("inquirer");
 var mysql = require("mysql");
-//var bamazonCustomer = require("./bamazonCustomer.js")
-
+var Table = require('easy-table');
 
 // make connection to sql
 var connection = mysql.createConnection({
@@ -16,7 +15,7 @@ var connection = mysql.createConnection({
 
     // Your password
     password: "root",
-    database: "greatBay_DB"
+    database: "bamazon"
 });
 // call initial prompts to start 
 initialPromts();
@@ -26,7 +25,8 @@ function initialPromts(){
         "View Products for Sale",
         "View Low Inventory",
         "Add to Inventory",
-        "Add New Product"
+        "Add New Product",
+        "Quit?"
     ]
     inquirer
         .prompt({
@@ -37,14 +37,14 @@ function initialPromts(){
         })
         .then(function (answer) {
             // Select function based on answer
-            switch (options) {
+            switch (answer.options) {
                 case "View Products for Sale":
+                    console.log("display product function");
                     displayProducts();
-                    break;
             
-                // case "View Low Inventory":
-                //     lowInventory();
-                //     break;
+                case "View Low Inventory":
+                    lowInventory();
+                    break;
             
                 // case "Add to Inventory":
                 //     addInventory();
@@ -53,12 +53,46 @@ function initialPromts(){
                 // case "Add New Product":
                 //     addProduct();
                 //     break;
+
+                case "Quit":
+                    connect.end();
+                    break;
+
             }
-            // if (answer.options === "View Products for Sale") {
-            //     displayProducts();
-            // }
-            // // else {
-            // //     bidAuction();
-            // // }
+            
         })
     }
+
+    // Display the Products in bamazon database
+function displayProducts() {
+
+    // get categories for post
+    console.log("Selecting all Available Items...\n");
+    connection.query("SELECT * FROM products", function (err, res) {
+        if (err) {
+            console.log(err);
+            throw err;
+        } else {
+            // used for the easy-table package
+            var t = new Table;
+
+            // // Log all results of the SELECT statement
+            res.forEach((productList, i) => {
+                // t.cell is used for easy-table set-up
+                t.cell('Product Id', productList.id)
+                t.cell('Department Name',productList.department_name)
+                t.cell('Description', productList.product_name)
+                t.cell('Price',productList.customer_price,Table.number(2))
+                t.cell('Quantity', productList.quantity)
+                t.newRow()
+
+            })
+            console.log(t.toString());
+            initialPromts();  
+
+        }
+    // console.log(query.sql);    
+    }
+    )
+};
+
