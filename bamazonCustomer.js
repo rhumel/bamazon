@@ -1,11 +1,7 @@
 // import packages into file
 var inquirer = require("inquirer");
 var mysql = require("mysql");
-
-//deifine variables for posting new auction item
-var postItem = "";
-var postCategory = "";
-var postBid = "";
+var Table = require('easy-table');
 
 // make connection to sql
 var connection = mysql.createConnection({
@@ -25,10 +21,9 @@ var connection = mysql.createConnection({
 
 displayProducts();
 
+
 // Display the Products in bamazon database
-//
 function displayProducts() {
-    var ItemArray = [];
 
     // get categories for post
     console.log("Selecting all Available Items...\n");
@@ -37,18 +32,24 @@ function displayProducts() {
             console.log(err);
             throw err;
         } else {
-            console.log("---------------------------Product List----------------------------------");
-            console.log("  No.     Product         Department      Price        Quantity          ");
-            console.log("_________________________________________________________________________");
-            // Log all results of the SELECT statement
-            res.forEach((productList, i) => {
+            // used for the easy-table package
+            var t = new Table;
 
-                console.log(" " + productList.id + "     " + productList.product_name + "         " + productList.department_name + "           " + productList.customer_price + "     " + productList.quantity);
+            // // Log all results of the SELECT statement
+            res.forEach((productList, i) => {
+                // t.cell is used for easy-table set-up
+                t.cell('Product Id', productList.id)
+                t.cell('Department Name',productList.department_name)
+                t.cell('Description', productList.product_name)
+                t.cell('Price',productList.customer_price,Table.number(2))
+                t.cell('Quantity', productList.quantity)
+                t.newRow()
 
             })
-            //console.log(res);
+            console.log(t.toString());
+           
             // call initial prompts to start 
-            initialPromts();
+           initialPromts();
            
         }
     }
@@ -73,7 +74,9 @@ inquirer
     ])
 
     .then(function (answer) {
-        // based on their answer, either call the bid or the post functions
+        //
+        // Create and run QUERY to find the Item # of the product
+        //
         var itemNumber = answer.itemNumber;
         var quantity = answer.purchaseQuantity;
         console.log(itemNumber);
@@ -86,15 +89,15 @@ inquirer
                 id: itemNumber
             },
             function (err, res) {
-                //  console.log(res.affectedRows + " auction item inserted!\n");
                 if (err) {
                     console.log(err)
                 } else {
-                   
+                    // Check the User qty against DB.  If insufficient, send user mesg
                     if (quantity > res[0].quantity) {
                         console.log("Sorry, it appears that we only have " + res[0].quantity +" of the " + res[0].product_name); //+ " auction item Selected\n"); 
                         connection.end();
                     } else {
+                        //subtract USER qty from db and cal fnct to update the db and to display totaal costs
                         remainQuantity = res[0].quantity - quantity;
                         price = res[0].customer_price;
                         updateQuantity(itemNumber, remainQuantity);
@@ -113,7 +116,10 @@ inquirer
 }
 
 function updateQuantity(itemNumber,prodQuant) {
+   
     console.log("Updating all quantities...\n");
+   
+    //update the QTY in the product table for the item number
     var query = connection.query(
       "UPDATE products SET ? WHERE ?",
       [
@@ -136,6 +142,7 @@ function updateQuantity(itemNumber,prodQuant) {
     
   }
 
+   //called when the purchase is made to display total 
   function totalPurchase(price,quantity) {
       console.log (price +" " + quantity);
 
@@ -145,3 +152,4 @@ function updateQuantity(itemNumber,prodQuant) {
     console.log("Your total cost is $" + totalCost);
 
   };
+ 

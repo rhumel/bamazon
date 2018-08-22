@@ -1,11 +1,8 @@
 // import packages into file
 var inquirer = require("inquirer");
 var mysql = require("mysql");
+//var bamazonCustomer = require("./bamazonCustomer.js")
 
-// //deifine variables for posting new auction item
-// var postItem = "";
-// var postCategory = "";
-// var postBid = "";
 
 // make connection to sql
 var connection = mysql.createConnection({
@@ -35,16 +32,33 @@ function initialPromts(){
         .prompt({
             name: "options",
             type: "rawlist",
-            message: "Would you like to [POST] an auction or [BID] on an auction?",
+            message: "Please make your selection",
             choices: optionsArray
         })
         .then(function (answer) {
-            // based on their answer, either call the bid or the post functions
-            // if (answer.options.toUpperCase() === "POST") {
-            //     postAuction();
+            // Select function based on answer
+            switch (options) {
+                case "View Products for Sale":
+                    displayProducts();
+                    break;
+            
+                // case "View Low Inventory":
+                //     lowInventory();
+                //     break;
+            
+                // case "Add to Inventory":
+                //     addInventory();
+                //     break;
+            
+                // case "Add New Product":
+                //     addProduct();
+                //     break;
+            }
+            // if (answer.options === "View Products for Sale") {
+            //     displayProducts();
             // }
-            // else {
-            //     bidAuction();
-            // }
+            // // else {
+            // //     bidAuction();
+            // // }
         })
     }
