@@ -166,32 +166,34 @@ function addInventory() {
                     )}
                 }
         )
-      })   
-
-
-// function addInventory() {
-
-//     // get categories for post
-//     console.log("Selecting all Available Items to add ...\n");
-//     connection.query("SELECT * FROM products", function (err, res) {
-//         if (err) {
-//             console.log(err);
-//             throw err;
-//         } else {
-//             // used for the easy-table package
-//             var t = new Table;
-
-//             // // Log all results of the SELECT statement
-//             res.forEach((productList, i) => {
-//                 // t.cell is used for easy-table set-up
-//                 t.cell('Product Id', productList.id)
-//                 t.cell('Department Name',productList.department_name)
-//                 t.cell('Description', productList.product_name)
-//                 t.cell('Price',productList.customer_price,Table.number(2))
-//                 t.cell('Quantity', productList.quantity)
-//                 t.newRow()
-
-//             })
-//             console.log(t.toString());
-//             initialPromts();  
+      });   
     }
+
+function lowInventory() {
+    
+    // get categories for post
+    console.log("Selecting all Available Items to add ...\n");
+    connection.query("SELECT* from products where quantity between 0 and 5", function (err, res) {
+        if (err) {
+            console.log(err);
+            throw err;
+        } else {
+            // used for the easy-table package
+            var t = new Table;
+
+            // // Log all results of the SELECT statement
+            res.forEach((productList, i) => {
+                // t.cell is used for easy-table set-up
+                t.cell('Product Id', productList.id)
+                t.cell('Department Name',productList.department_name)
+                t.cell('Description', productList.product_name)
+                t.cell('Price',productList.customer_price,Table.number(2))
+                t.cell('Quantity', productList.quantity)
+                t.newRow()
+
+            })
+            console.log(t.toString());
+            initialPromts();  
+         }
+        })
+}
