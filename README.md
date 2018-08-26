@@ -53,9 +53,9 @@ To run the application, you decide which module you need.  Run the appropriate c
 
 ##### 2.  Display low inventory (5 or less) 
   
-  Display low inventory.  Then update the inventory to increase quantity.
+  ###### Display low inventory.  Then **UPDATE** the inventory to increase quantity.
         
 <img width="960" alt="low inventory" src="https://user-images.githubusercontent.com/38961938/44630736-7c13d900-a930-11e8-86d6-f480c6fcc257.png">
 
-
+##### 3. 
 
