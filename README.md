@@ -59,3 +59,10 @@ To run the application, you decide which module you need.  Run the appropriate c
 
 ##### 3. Add new Product and Quit.
 
+<img width="960" alt="add new prod display and quit" src="https://user-images.githubusercontent.com/38961938/44631025-3bb65a00-a934-11e8-9f76-20274c50a02e.png">
+
+### bamazonSupervisor.js
+
+#### Supervisor has two main functions;
+*View departments,over head caost and total products
+*Add new Departments
