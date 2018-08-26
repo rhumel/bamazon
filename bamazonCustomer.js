@@ -1,4 +1,4 @@
-// import packages into file
+//  import packages into file
 var inquirer = require("inquirer");
 var mysql = require("mysql");
 var Table = require('easy-table');
