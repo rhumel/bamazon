@@ -70,7 +70,14 @@ To run the application, you decide which module you need.  Run the appropriate c
 ##### Open bamazonSupervisor.js
 <img width="960" alt="supervisor start" src="https://user-images.githubusercontent.com/38961938/44631505-03664a00-a93b-11e8-8bde-f46dba414dff.png">
 
-##### View by Department
+##### View by DEPARTMENT
   Shows the over head costs and profit by department.
   
 <img width="960" alt="view supervisor by department" src="https://user-images.githubusercontent.com/38961938/44631507-09f4c180-a93b-11e8-8020-8478527bbc64.png">
+
+##### Add new DEPARTMENT
+   
+   Display the prompts to add new department.
+
+<img width="960" alt="updated department" src="https://user-images.githubusercontent.com/38961938/44631589-512f8200-a93c-11e8-9f09-f3fe8673ae33.png">
+
