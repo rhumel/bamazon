@@ -35,7 +35,6 @@ To run the application, you decide which module you need.  Run the appropriate c
 
 ###### 2.Choose the iventory item, and quantity.
 
-
 <img width="960" alt="display total cost of purcahse" src="https://user-images.githubusercontent.com/38961938/44629701-0e13e580-a921-11e8-8b25-97434b8f6039.png">
 
 ### bamazonManager.js
@@ -52,8 +51,11 @@ To run the application, you decide which module you need.  Run the appropriate c
 <img width="960" alt="view products and low inventory" src="https://user-images.githubusercontent.com/38961938/44630436-b9c23300-a92b-11e8-91bc-e5293f5bdcd8.png">
 
 
-##### 2.  Display low inventory (5 or less)
-
+##### 2.  Display low inventory (5 or less) 
+  
+  Display low inventory.  Then update the inventory to increase quantity.
+        
+<img width="960" alt="low inventory" src="https://user-images.githubusercontent.com/38961938/44630736-7c13d900-a930-11e8-86d6-f480c6fcc257.png">
 
 
 
