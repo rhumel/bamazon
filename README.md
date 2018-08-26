@@ -29,6 +29,10 @@ To run the application, you decide which module you need.  Run the appropriate c
 
 #### Cusomer mode has a couple of functions.  
 
-1. Display available inventory
+###### 1. Display available inventory
 
 <img width="960" alt="display products" src="https://user-images.githubusercontent.com/38961938/44629602-c17bda80-a91f-11e8-9329-111856b9b33f.png">
+
+###### 2.Choose the iventory item, and quantity.
+
+<img width="960" alt="display total cost of purcahse" src="https://user-images.githubusercontent.com/38961938/44629701-0e13e580-a921-11e8-8b25-97434b8f6039.png">
