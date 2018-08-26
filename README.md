@@ -57,5 +57,5 @@ To run the application, you decide which module you need.  Run the appropriate c
         
 <img width="960" alt="low inventory" src="https://user-images.githubusercontent.com/38961938/44630736-7c13d900-a930-11e8-86d6-f480c6fcc257.png">
 
-##### 3. 
+##### 3. Add new Product and Quit.
 
