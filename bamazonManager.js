@@ -18,10 +18,20 @@ var connection = mysql.createConnection({
     database: "bamazon"
 });
 // call initial prompts to start 
-initialPromts();
+// initialPromts();
+connection.connect(function(err){
 
-function initialPromts(){
-    var optionsArray =[
+if (err) {
+    console.log(err);
+}
+initialPromts(); 
+})  
+
+
+function initialPromts() {
+
+
+    var optionsArray = [
         "View Products for Sale",
         "View Low Inventory",
         "Add to Inventory",
@@ -40,33 +50,34 @@ function initialPromts(){
             switch (answer.options) {
                 case "View Products for Sale":
                     console.log("display product function");
-                    displayProducts();
-                    initialPromts();
+                    displayProducts(initialPromts);
+                   
                     break;
-            
-                case "View Low Inventory":
-                    lowInventory();
-                    break;
-            
-                case "Add to Inventory":
-                    addInventory();
-                    break;
-            
-                // case "Add New Product":
-                //     addProduct();
-                //     break;
 
-                case "Quit":
-                    connect.end();
+                case "View Low Inventory":
+                    lowInventory(initialPromts);
+                    break;
+
+                case "Add to Inventory":
+                    addInventory(initialPromts);
+                    break;
+
+                case "Add New Product":
+                    addProduct(initialPromts);
+                    break;
+
+                default:
+                    // connection.end();
+                    process.exit(0);
                     break;
 
             }
-            
-        })
-    }
 
-    // Display the Products in bamazon database
-function displayProducts() {
+        })
+}
+
+// Display the Products in bamazon database
+function displayProducts(cb) {
 
     // get categories for post
     console.log("Selecting all Available Items...\n");
@@ -82,97 +93,96 @@ function displayProducts() {
             res.forEach((productList, i) => {
                 // t.cell is used for easy-table set-up
                 t.cell('Product Id', productList.id)
-                t.cell('Department Name',productList.department_name)
+                t.cell('Department Name', productList.department_name)
                 t.cell('Description', productList.product_name)
-                t.cell('Price',productList.customer_price,Table.number(2))
+                t.cell('Price', productList.customer_price, Table.number(2))
                 t.cell('Quantity', productList.quantity)
+                t.cell('Product Sales', productList.product_sales)
                 t.newRow()
 
             })
             console.log(t.toString());
             // initialPromts();  
-
+            cb()
         }
-    // console.log(query.sql);    
+        // console.log(query.sql);    
     }
     )
 };
 
-function addInventory() {
+function addInventory(cb) {
     // Call display so the Manager can see what is available
-        
-    //    displayProducts();
-
     // get categories for post
     inquirer
-    .prompt([
-        {
-            name: "itemNumber",
-            type: "input",
-            message: "What is the number of the item you wish to increase the inventory?"
-        },
-        {
-            name: "purchaseQuantity",
-            type: "input",
-            message: "How many units should be added to inventory?"
-        }
-
-    ])
-
-    .then(function (answer) {
-        //
-        // Create and run QUERY to find the Item # of the product
-        //
-        var itemNumber = answer.itemNumber;
-        var quantity = answer.purchaseQuantity;
-        console.log(itemNumber);
-        console.log(quantity);
-
-        // Select the item from the db and get the db quantity
-        connection.query(
-            "SELECT * from products WHERE ?",
+        .prompt([
             {
-                id: itemNumber
+                name: "itemNumber",
+                type: "input",
+                message: "What is the number of the item you wish to increase the inventory?"
             },
-            function (err, res) {
-                if (err) {
-                    console.log(err)
-                } else {
-                    // get the new quantity to update the DB
-                    console.log(res[0].quantity);
-                    var prodQuant = parseInt(quantity) + parseInt(res[0].quantity);
-                    var product = res[0].product_name;
-                    // use the quantity and run SQL statement
-                    connection.query(
-                        "UPDATE products SET ? WHERE ?",
-                        [
-                          {
-                            quantity: prodQuant
-                          },
-                      
-                          {
-                            id: itemNumber
-                          }
-                        ],
-                        function (err, res) {
-                            if (err) {
-                                console.log(err)
-                            } else {
-                                // Check the User qty against DB.  If insufficient, send user mesg
-                                console.log("The inventory for "+ product +" has been increased to "+ prodQuant+".");
-                                }
-            
-                            }
-                    )}
-                }
-        )
-      });   
-    }
+            {
+                name: "purchaseQuantity",
+                type: "input",
+                message: "How many units should be added to inventory?"
+            }
 
-function lowInventory() {
-    
-    // get categories for post
-    console.log("Selecting all Available Items to add ...\n");
+        ])
+
+        .then(function (answer) {
+            //
+            // Create and run QUERY to find the Item # of the product
+            //
+            var itemNumber = answer.itemNumber;
+            var quantity = answer.purchaseQuantity;
+            console.log(itemNumber);
+            console.log(quantity);
+
+            // Select the item from the db and get the db quantity
+            connection.query(
+                "SELECT * from products WHERE ?",
+                {
+                    id: itemNumber
+                },
+                function (err, res) {
+                    if (err) {
+                        console.log(err)
+                    } else {
+                        // get the new quantity to update the DB
+                        console.log(res[0].quantity);
+                        var prodQuant = parseInt(quantity) + parseInt(res[0].quantity);
+                        var product = res[0].product_name;
+                        // use the quantity and run SQL statement
+                        connection.query(
+                            "UPDATE products SET ? WHERE ?",
+                            [
+                                {
+                                    quantity: prodQuant
+                                },
+                                {
+                                    id: itemNumber
+                                }
+                            ],
+                            function (err, res) {
+                                if (err) {
+                                    console.log(err)
+                                } else {
+                                    // Check the User qty against DB.  If insufficient, send user mesg
+                                    console.log("The inventory for " + product + " has been increased to " + prodQuant + ".");
+                                cb();
+                                }
+
+                            }
+                        )
+                    }
+                }
+            )
+        });
+}
+
+function lowInventory(cb) {
+
+    // Select all Items with with inventory 5 or lower
+    console.log("Selecting all Available Items with low inventory...\n");
     connection.query("SELECT* from products where quantity between 0 and 5", function (err, res) {
         if (err) {
             console.log(err);
@@ -185,15 +195,71 @@ function lowInventory() {
             res.forEach((productList, i) => {
                 // t.cell is used for easy-table set-up
                 t.cell('Product Id', productList.id)
-                t.cell('Department Name',productList.department_name)
+                t.cell('Department Name', productList.department_name)
                 t.cell('Description', productList.product_name)
-                t.cell('Price',productList.customer_price,Table.number(2))
+                t.cell('Price', productList.customer_price, Table.number(2))
                 t.cell('Quantity', productList.quantity)
+                t.cell('Product Sales', productList.product_sales)
                 t.newRow()
-
             })
             console.log(t.toString());
-            initialPromts();  
-         }
-        })
+            cb();
+        }
+    })
+}
+
+function addProduct(cb) {
+    // add new product to product list
+
+    inquirer
+        .prompt([
+            {
+                name: "deptName",
+                type: "input",
+                message: "Enter the DEPARTMENT for the new product."
+            },
+            {
+                name: "itemName",
+                type: "input",
+                message: "What is the NAME of the item you wish to add?"
+            },
+            {
+                name: "custPrice",
+                type: "input",
+                message: "What is the CUSTOMER PRICE of the item you wish to add?"
+            },
+            {
+                name: "purchaseQuantity",
+                type: "input",
+                message: "How many units should be added to inventory?"
+            }
+
+        ])
+
+        .then(function (answer) {
+            //
+            // Create and run QUERY to ADD a new product to DB
+            //
+            connection.query(
+                "INSERT INTO products SET ?",
+                {
+                    department_name: answer.deptName,
+                    product_name: answer.itemName,
+                    customer_price: answer.custPrice,
+                    quantity: answer.purchaseQuantity,
+                    product_sales:0
+                },
+                function (err, res) {
+                    if (err) {
+                        console.log(err)
+                    } else {
+                        // DIsplay the updated table
+                        cb();
+                        
+                    }
+
+                }
+            )
+        });
+    
 }

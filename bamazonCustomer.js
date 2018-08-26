@@ -43,6 +43,7 @@ function displayProducts() {
                 t.cell('Description', productList.product_name)
                 t.cell('Price',productList.customer_price,Table.number(2))
                 t.cell('Quantity', productList.quantity)
+                t.cell('Product Sales', productList.product_sales)
                 t.newRow()
 
             })
@@ -98,10 +99,11 @@ inquirer
                         connection.end();
                     } else {
                         //subtract USER qty from db and cal fnct to update the db and to display totaal costs
+                        var totalSales = parseInt(res[0].product_sales);
                         remainQuantity = res[0].quantity - quantity;
                         price = res[0].customer_price;
                         updateQuantity(itemNumber, remainQuantity);
-                        totalPurchase(price,quantity);
+                        totalPurchase(price,quantity,totalSales,itemNumber);
                     }
 
                 }
@@ -143,13 +145,34 @@ function updateQuantity(itemNumber,prodQuant) {
   }
 
    //called when the purchase is made to display total 
-  function totalPurchase(price,quantity) {
+  function totalPurchase(price,quantity,totalSales,itemNumber) {
       console.log (price +" " + quantity);
 
-
+    
     var totalCost = (price * quantity);
+    var totalSales = (parseInt(totalSales) + parseInt(totalCost));
 
     console.log("Your total cost is $" + totalCost);
 
+        // Update the product sales
+        connection.query(
+            "UPDATE products SET ? WHERE ?",
+            [
+                {
+                    product_sales: totalSales
+                },
+                {
+                    id: itemNumber
+                }
+            ],
+            function (err, res) {
+                if (err) {
+                    console.log(err)
+                } else {
+                   console.log("Product sales updated");
+                }
+
+            }
+        )
   };
  
