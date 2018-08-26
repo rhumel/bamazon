@@ -35,9 +35,10 @@ To run the application, you decide which module you need.  Run the appropriate c
 
 ###### 2.Choose the iventory item, and quantity.
 
+
 <img width="960" alt="display total cost of purcahse" src="https://user-images.githubusercontent.com/38961938/44629701-0e13e580-a921-11e8-8b25-97434b8f6039.png">
 
-### bamazonManager
+### bamazonManager.js
 
 #### Manager view has a few functions; 
 *View products list
@@ -46,5 +47,13 @@ To run the application, you decide which module you need.  Run the appropriate c
 *Add to new product
 *Quit
 
-##### 1.  Display the Products List 
+##### 1.  Display the Products List
+
+<img width="960" alt="view products and low inventory" src="https://user-images.githubusercontent.com/38961938/44630436-b9c23300-a92b-11e8-91bc-e5293f5bdcd8.png">
+
+
+##### 2.  Display low inventory (5 or less)
+
+
+
 
