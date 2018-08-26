@@ -80,8 +80,8 @@ inquirer
         //
         var itemNumber = answer.itemNumber;
         var quantity = answer.purchaseQuantity;
-        console.log(itemNumber);
-        console.log(quantity);
+        // console.log(itemNumber);
+        // console.log(quantity);
 
 
         var query = connection.query(
@@ -146,7 +146,7 @@ function updateQuantity(itemNumber,prodQuant) {
 
    //called when the purchase is made to display total 
   function totalPurchase(price,quantity,totalSales,itemNumber) {
-      console.log (price +" " + quantity);
+    //   console.log (price +" " + quantity);
 
     
     var totalCost = (price * quantity);
